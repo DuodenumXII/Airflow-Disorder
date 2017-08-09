@@ -14,37 +14,7 @@
     <script src="../../../semantic/dist/semantic.js"></script>
     <script>
         $(document).ready(function(){
-            $.post(
-                '/index.php/user/query/trains2s',
-                JSON.stringify(['北京', '上海', '+2 day']),
-                function (data) {
-                    var arr = JSON.parse(data);
-                    var tr_html = `<tr>
-            <td>
-                <h3 class="ui header">{name}</h3>
-                <a>查看经停</a>
-            </td>
-            <td>
-                <h4>[始]{start}</h4>
-                <h4>[终]{end}</h4>
-            </td>
-            <td>
-                <h4>{start_time}</h4>
-                <h4>{end_time}</h4>
-            </td>
-            <td>
-                <span>{time_len}</span>
-            </td>
-            <td>
-                {seat_class}
-            </td>
-            <td>
-                {button}
-            </td>
-        </tr>`;
-                    alert(arr);
-                }
-            );
+
         });
 
         function buy_ticket(e) {
@@ -78,20 +48,6 @@
 </div>
 
 <div class="ui container">
-    <table class="ui fixed table" id="result-list">
-        <thead>
-        <tr><th>车次</th>
-            <th>发站/到站</th>
-            <th>发/到时间</th>
-            <th>运行时间</th>
-            <th>参考票价</th>
-            <th>剩余票量</th>
-            <th> </th>
-        </tr></thead>
-        <tbody>
-
-        </tbody>
-    </table>
     <table class="ui fixed table">
         <thead>
         <tr><th>车次</th>
@@ -99,8 +55,7 @@
             <th>发/到时间</th>
             <th>运行时间</th>
             <th>参考票价</th>
-            <th>剩余票量</th>
-            <th> </th>
+            <th>操作</th>
         </tr></thead>
         <tbody>
         <tr>

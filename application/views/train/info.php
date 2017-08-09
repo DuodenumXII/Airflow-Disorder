@@ -17,31 +17,35 @@
             $.post(
                 '/index.php/user/query/trains2s',
                 JSON.stringify({'start': '北京', 'end': '上海', 'date': '+2 day'}),
-                function (data) {
-                    //var arr = JSON.parse(data);
-                    var arr = data;
-//                    for (var i in arr['data']) {
-//                        alert(i);
-//                    }
-                    var tbody_html = '';
-//                    alert(arr.toSource());
-                    for (var item in arr['data']['result']['list']) {
-                        var name = item['train_no'];
-                        var start = '[' + item['start_station_type'] + ']' +  item['start_station'];
-                        var end = '[' + item['end_station_type'] + ']' +  item['end_station'];
-                        var start_time = item['start_time'];
-                        var end_time = item['end_time'];
-                        var run_time = item['run_time'];
-                        var price_list = item['price_list'];
-                        var seat_class = '';
-                        var button = '';
-                        for (var temp in price_list) {
+                function (response) {
+                    update_table(response);
+                }
+            );
+        });
+
+        function update_table(response) {
+            if (response.data.reason == "查询成功") {
+                var tbody_html = '';
+
+                $.each(response.data.result.list, function (index, item) {
+                    var name = item['train_no'];
+                    var start = '[' + item['start_station_type'] + ']' + item['start_station'];
+                    var end = '[' + item['end_station_type'] + ']' + item['end_station'];
+                    var start_time = item['start_time'];
+                    var end_time = item['end_time'];
+                    var run_time = item['run_time'];
+                    var price_list = item['price_list'];
+                    var seat_class = '';
+                    var button = '';
+                    $.each(price_list, function (key, temp) {
+                        {
                             seat_class += `<p>${temp['price_type']}<span style="color:red">￥${temp['price']}</span></p>
 `;
-                            button += `<p><a href="javascript:void(0);" onclick="buy_ticket(this)" data-info="${name}&{start}&${end}&${temp['price_type']}">购票</a></p>
+                            button += `<p><a href="javascript:void(0);" onclick="buy_ticket(this)" data-info="${name}&${start}&${end}&${temp['price_type']}&${temp['price']}">购票</a></p>
 `;
                         }
-                        var tr_html = `<tr>
+                    });
+                    var tr_html = `<tr>
             <td>
                 <h3 class="ui header">${name}</h3>
                 <a>查看经停</a>
@@ -64,13 +68,15 @@
                 ${button}
             </td>
         </tr>`;
-                        tbody_html += tr_html;
-                    }
-                    alert(tbody_html);
-                    $('tbody').html(tbody_html);
-                }
-            );
-        });
+                    tbody_html += tr_html;
+                });
+                $('tbody').html(tbody_html);
+                $('tbody').transition('slide down');
+                $('.active.dimmer').removeClass('active');
+                return;
+            }
+            alert('加载列车信息失败，请重试');
+        }
 
         function buy_ticket(e) {
             var data = e.getAttribute('data-info').split('&');
@@ -109,11 +115,12 @@
             <th>发/到时间</th>
             <th>运行时间</th>
             <th>参考票价</th>
-            <th>剩余票量</th>
-            <th> </th>
+            <th>操作</th>
         </tr></thead>
-        <tbody>
-
+        <tbody style="display: none">
+        <div class="ui active inverted dimmer">
+            <div class="ui text loader">加载</div>
+        </div>
         </tbody>
     </table>
 <!--    <table class="ui fixed table">-->
