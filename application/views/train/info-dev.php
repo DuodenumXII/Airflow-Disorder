@@ -14,8 +14,55 @@
     <script src="../../../semantic/dist/semantic.js"></script>
     <script>
         $(document).ready(function(){
+            $('.ui.dropdown')
+                .dropdown()
+            ;
+            $('[name="activator"]')
+                .popup({
+                    on: 'click',
+                    position: 'bottom center'
+                })
+            ;
+            $('[name$="time"]').val(getNowFormatDate());
+            $('#exchange-btn').click(function () {
+                exchange('[name="start"]', '[name="end"]');
+            });
+            $('#search-btn').click(function () {
+                $.post(
+                    '/airflow.php/user/query/trains2s',
+                    JSON.stringify({
+                        'start': $('[name="start"]').val(),
+                        'end': $('[name="end"]').val(),
+                        'date': $('[name="dep-time"]').val()
+                    }),
+                    function (response) {
 
+                    }
+                )
+            })
         });
+
+        function exchange(a, b) {
+            var temp = $(b).val();
+            $(b).val($(a).val());
+            $(a).val(temp);
+        }
+
+        function getNowFormatDate() {
+            var date = new Date();
+            var seperator1 = "-";
+            var year = date.getFullYear();
+            var month = date.getMonth() + 1;
+            var strDate = date.getDate();
+            if (month >= 1 && month <= 9) {
+                month = "0" + month;
+            }
+            if (strDate >= 0 && strDate <= 9) {
+                strDate = "0" + strDate;
+            }
+            var currentdate = year + seperator1 + month + seperator1 + strDate;
+            return currentdate;
+        }
 
         function buy_ticket(e) {
             var data = e.getAttribute('data-info').split('&');
@@ -47,8 +94,47 @@
     </div>
 </div>
 
-<div class="ui container">
-    <table class="ui fixed table">
+<a class="ui container">
+    <div class="ui form">
+        <div class="inline fields">
+            <div class="field">
+                <select class="ui dropdown" id="search-type" name="search-type">
+                    <option value="0">站站搜索</option>
+                    <option value="1">车次搜索</option>
+                </select>
+            </div>
+            <div class="field">
+                <div class="ui labeled purple input">
+                    <div class="ui label">出发</div>
+                    <input type="text" name="start" placeholder="北京">
+                </div>
+            </div>
+            <div class="field">
+                <div class="ui icon basic button" id="exchange-btn">
+                    <i class="ui icon exchange"></i>
+                </div>
+            </div>
+            <div class="field">
+                <div class="ui labeled input">
+                    <div class="ui label">到达</div>
+                    <input type="text" name="end" placeholder="上海">
+                </div>
+            </div>
+            <div class="field">
+                <div class="ui icon labeled input">
+                    <div class="ui label">日期</div>
+                    <input type="date" name="dep-time">
+                    <i class="ui icon calendar"></i>
+                </div>
+            </div>
+            <div class="field">
+                <div class="ui primary button" id="search-btn">
+                    立即查询
+                </div>
+            </div>
+        </div>
+    </div>
+    <table class="ui fixed table" id="info-list">
         <thead>
         <tr><th>车次</th>
             <th>发站/到站</th>
@@ -61,7 +147,38 @@
         <tr>
             <td>
                 <h3 class="ui header">G4</h3>
-                <a>查看经停</a>
+                <a href="javascript:void(0);" name="activator" data-name="G4" onclick="console.log('ha')">查看经停</a>
+                <div class="ui flowing popup bottom center hidden">
+                    <table class="ui very basic table" id="G4-info">
+                        <thead>
+                        <tr><th>站次</th>
+                            <th>站名</th>
+                            <th>到达时间</th>
+                            <th>离开时间</th>
+                        </tr></thead>
+                        <tbody>
+                        <tr>
+                            <td>1</td>
+                            <td>大阪</td>
+                            <td>现在</td>
+                            <td>未来</td>
+                        </tr>
+                        <tr>
+                            <td>1</td>
+                            <td>大阪</td>
+                            <td>现在</td>
+                            <td>未来</td>
+                        </tr>
+                        <tr>
+                            <td>1</td>
+                            <td>大阪</td>
+                            <td>现在</td>
+                            <td>未来</td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+<!--                <a href="javascript:void(0);" onclick="buy_ticket(this)" data-name="G4">购票</a>-->
             </td>
             <td>
                 <h4>[始]北京南</h4>
