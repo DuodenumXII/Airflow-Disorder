@@ -25,8 +25,10 @@ class Trainstationlist extends CI_Controller
             $cities = json_decode($this->curl_from_api($appkey), true);
             $ret = $this->dao->update_train_station_list($cities['result']);
             $this->msg['data']['result'] = $ret;
+            $this->output->set_content_type('application/json', 'utf-8');
             $this->output->set_output(json_encode($this->msg));
         } catch (Exception $e) {
+            $this->output->set_content_type('application/json', 'utf-8');
             $this->output->set_output(json_encode(['err_code' => $e->getCode(), 'err_msg' => $e->getMessage()]));
         }
     }
