@@ -135,7 +135,7 @@
                     .popup({
                         on: 'click',
                         position: 'bottom center',
-                        lastResort: 'bottom right'
+                        lastResort: 'botto'
                     })
                 ;
                 return;
