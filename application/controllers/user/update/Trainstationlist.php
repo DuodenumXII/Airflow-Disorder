@@ -15,7 +15,6 @@ class Trainstationlist extends CI_Controller
         parent::__construct();
         $this->config->load('api_settings');
         $this->load->library('dao');
-        $this->output->set_content_type('application/json', 'utf-8');
     }
 
     public function index()

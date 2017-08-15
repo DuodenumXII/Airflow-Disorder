@@ -42,7 +42,7 @@ class Trains2s extends CI_Controller
         }
         if (!is_string($arr['start']))
         {
-            throw new Exception('start is not string', -2);
+            throw new Exception('start is not a string', -2);
         }
         if (!isset($arr['end']))
         {
@@ -50,7 +50,7 @@ class Trains2s extends CI_Controller
         }
         if (!is_string($arr['end']))
         {
-            throw new Exception('end is not string', -2);
+            throw new Exception('end is not a string', -2);
         }
         if (isset($arr['date'])) {
             $date = strtotime($arr['date']);

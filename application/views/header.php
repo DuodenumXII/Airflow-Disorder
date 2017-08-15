@@ -228,6 +228,7 @@
             $('.ui.modal')
                 .modal({
                     onApprove: function () {
+                        console.log(md5(md5($('[name="password"]').val()) + 'airflow'));
                         $.post(
                             'http://localhost/airflow.php/user/auth/login',
                             JSON.stringify({'name': $('[name="name"]').val(), 'password': md5(md5($('[name="password"]').val()) + 'airflow')}),
@@ -272,7 +273,7 @@
                 }
             );
         }
-        
+
         function refreshNavBar() {
             if (!sessionStorage.getItem('user')) {
                 $('.logged.item')
@@ -318,24 +319,15 @@
             </div>
             <a class="login item" href="javascript:0" onclick="login()">登陆</a>
             <a class="login item">注册</a>
-            <div class="logged item">
-                <img class="ui avatar image" src="" id="avatar" style="margin-right: 10px">
-                <div class="ui inline dropdown">
-                    <div class="text" id="user-name">Duodenum</div>
+            <div class="logged ui pointing dropdown link item">
+                <img class="ui avatar image" src="https://gsp0.baidu.com/5aAHeD3nKhI2p27j8IqW0jdnxx1xbK/tb/editor/images/bjq/image_editoricon16.png" id="avatar" style="margin-right: 10px">
+                <span class="text" id="user-name">Duodenum</span>
                     <i class="dropdown icon"></i>
                     <div class="menu">
                         <div class="item">个人中心</div>
                         <div class="item" onclick="logout()">注销</div>
                     </div>
-                </div>
             </div>
-
-<!--            <div class="ui logged dropdown">-->
-<!--                <div class="text">-->
-<!--                    <img class="ui avatar image" src="" id="avatar">-->
-<!--                    <span>Duodenum</span>Duodenum-->
-<!--                </div>-->
-<!--            </div>-->
         </div>
     </div>
 </div>

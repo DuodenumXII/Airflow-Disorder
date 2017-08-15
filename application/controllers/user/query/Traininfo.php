@@ -41,7 +41,7 @@ class Traininfo extends CI_Controller
         }
         if (!is_string($arr['name']))
         {
-            throw new Exception('name is not string', -2);
+            throw new Exception('name is not a string', -2);
         }
     }
 
