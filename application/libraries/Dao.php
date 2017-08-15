@@ -2,26 +2,26 @@
 
 class Dao
 {
-    private $dao_handler;
+    private $db_handle;
     private $CI;
 
     public function __construct()
     {
         $this->CI =& get_instance();
-        $this->dao_handler = $this->CI->load->database('default', true);
-//        var_dump($this->dao_handler);
+        $this->db_handle = $this->CI->load->database('default', true);
+//        var_dump($this->db_handle);
 //        exit;
-        if (!$this->dao_handler)
+        if (!$this->db_handle)
         {
-            throw new Exception('failed to connect to database', -1000);
+            throw new Exception($this->db_handle->error()['message'], -1000);
         }
     }
 
     private function valid_dao()
     {
-        if (!$this->dao_handler)
+        if (!$this->db_handle)
         {
-            throw new Exception('failed to connect to database', -1000);
+            throw new Exception($this->db_handle->error()['message'], -1000);
         }
     }
 
@@ -36,11 +36,11 @@ class Dao
         }
         $sql .= implode(', ', $values);
         $sql .= ' ON DUPLICATE KEY UPDATE name = VALUES(name), ename = VALUES(ename)';
-        $ret = $this->dao_handler->query($sql);
+        $ret = $this->db_handle->query($sql);
 
-        if (is_null($ret))
+        if (!$ret)
         {
-            throw new Exception('failed to update database', -1001);
+            throw new Exception($this->db_handle->error()['message'], -1001);
         }
         return $ret;
     }
@@ -48,11 +48,11 @@ class Dao
     public function query_train_station_list()
     {
         $this->valid_dao();
-        $ret = $this->dao_handler->get('tb_train_city');
+        $ret = $this->db_handle->get('tb_train_city');
 
-        if (is_null($ret))
+        if (!$ret)
         {
-            throw new Exception('failed to query database', -1001);
+            throw new Exception($this->db_handle->error()['message'], -1001);
         }
         return $ret;
     }
@@ -60,7 +60,7 @@ class Dao
     public function query_user_perms($user_id)
     {
         $this->valid_dao();
-        $ret = $this->dao_handler->query("SELECT res.res_uri, res.res_desc, r.role_id, r.role_name, r.role_desc
+        $ret = $this->db_handle->query("SELECT res.res_uri, res.res_desc, r.role_id, r.role_name, r.role_desc
 	, r.su
 FROM tb_user u
 	LEFT JOIN tb_role_user ru ON ru.user_id = u.user_id
@@ -69,9 +69,9 @@ FROM tb_user u
 	LEFT JOIN tb_resource res ON find_in_set(res.res_id, rr.resource_id)
 WHERE u.user_id = {$user_id}");
 
-        if (is_null($ret))
+        if (!$ret)
         {
-            throw new Exception('failed to query database', -1001);
+            throw new Exception($this->db_handle->error()['message'], -1001);
         }
         return $ret;
     }
@@ -79,11 +79,11 @@ WHERE u.user_id = {$user_id}");
     public function query_user_info($name, $password)
     {
         $this->valid_dao();
-        $ret = $this->dao_handler->select('user_id, user_name, user_icon, create_time, update_time')->get_where('tb_user', array('user_name' => $name, 'user_password' => $password));
+        $ret = $this->db_handle->select('user_id, user_name, user_icon, create_time, update_time')->get_where('tb_user', array('user_name' => $name, 'user_password' => $password));
 
-        if (is_null($ret))
+        if (!$ret)
         {
-            throw new Exception('failed to query database', -1001);
+            throw new Exception($this->db_handle->error()['message'], -1001);
         }
         return $ret;
     }
@@ -91,11 +91,33 @@ WHERE u.user_id = {$user_id}");
     public function query_user_role($user_id)
     {
         $this->valid_dao();
-        $ret = $this->dao_handler->get_where('tb_role_user', array('user_id' => $user_id));
+        $ret = $this->db_handle->get_where('tb_role_user', array('user_id' => $user_id));
 
-        if (is_null($ret))
+        if (!$ret)
         {
-            throw new Exception('failed to query database', -1001);
+            throw new Exception($this->db_handle->error()['message'], -1001);
+        }
+        return $ret;
+    }
+    
+    public function insert_user($arr)
+    {
+        $this->valid_dao();
+        $ret = $this->db_handle->insert('tb_user', $arr);
+        if (!$ret)
+        {
+            throw new Exception($this->db_handle->error()['message'], -1001);
+        }
+        return $this->db_handle->get_where('tb_user', array('user_name' => $arr['user_name']));
+    }
+
+    public function insert_role_user($arr)
+    {
+        $this->valid_dao();
+        $ret = $this->db_handle->insert('tb_role_user', $arr);
+        if (!$ret)
+        {
+            throw new Exception($this->db_handle->error()['message'], -1001);
         }
         return $ret;
     }
