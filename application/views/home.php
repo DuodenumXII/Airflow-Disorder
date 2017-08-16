@@ -1,68 +1,32 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <!-- Standard Meta -->
-    <meta charset="utf-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<script>
+    $(document).ready(function(){
+        $('.menu .item').tab();
+        $('[name$="time"]').val(getNowFormatDate());
+        $('title').html('Airflow-Disorder首页');
+    });
 
-    <!-- Site Properties -->
-    <title>Airflow Disorder-首页</title>
-    <link href="https://cdn.bootcss.com/semantic-ui/2.2.11/semantic.min.css" rel="stylesheet">
+    function exchange(a, b) {
+        var temp = $(b).val();
+        $(b).val($(a).val());
+        $(a).val(temp);
+    }
 
-    <script src="https://cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script>
-    <script src="https://cdn.bootcss.com/semantic-ui/2.2.11/semantic.min.js"></script>
-    <script>
-        $(document).ready(function(){
-            $('.menu .item').tab();
-            $('[name$="time"]').val(getNowFormatDate());
-        });
-
-        function exchange(a, b) {
-            var temp = $(b).val();
-            $(b).val($(a).val());
-            $(a).val(temp);
+    function getNowFormatDate() {
+        var date = new Date();
+        var seperator1 = "-";
+        var year = date.getFullYear();
+        var month = date.getMonth() + 1;
+        var strDate = date.getDate();
+        if (month >= 1 && month <= 9) {
+            month = "0" + month;
         }
-
-        function getNowFormatDate() {
-            var date = new Date();
-            var seperator1 = "-";
-            var year = date.getFullYear();
-            var month = date.getMonth() + 1;
-            var strDate = date.getDate();
-            if (month >= 1 && month <= 9) {
-                month = "0" + month;
-            }
-            if (strDate >= 0 && strDate <= 9) {
-                strDate = "0" + strDate;
-            }
-            var currentdate = year + seperator1 + month + seperator1 + strDate;
-            return currentdate;
+        if (strDate >= 0 && strDate <= 9) {
+            strDate = "0" + strDate;
         }
-    </script>
-</head>
-<body>
-
-<!-- Following Menu -->
-<div class="ui purple inverted borderless menu">
-    <div class="ui container">
-        <a class="active item">首页</a>
-        <a class="item">机票</a>
-        <a class="item">酒店</a>
-        <a class="item">火车票</a>
-        <a class="item">旅游</a>
-        <div class="right menu">
-            <div class="item">
-                <div class="ui icon input">
-                    <input type="text" placeholder="搜索...">
-                    <i class="search link icon"></i>
-                </div>
-            </div>
-            <a class="item">登陆</a>
-            <a class="item">注册</a>
-        </div>
-    </div>
-</div>
+        var currentdate = year + seperator1 + month + seperator1 + strDate;
+        return currentdate;
+    }
+</script>
 
 <div class="ui container">
     <div class="ui purple inverted segment">
@@ -636,37 +600,3 @@
         </div>
     </div>
 </div>
-<!--footer-->
-<br>
-<div class="ui purple inverted vertical footer segment">
-    <div class="ui container">
-        <div class="ui stackable inverted divided equal height stackable grid">
-            <div class="three wide column">
-                <h4 class="ui inverted header">About</h4>
-                <div class="ui inverted link list">
-                    <a href="#" class="item">Sitemap</a>
-                    <a href="#" class="item">Contact Us</a>
-                    <a href="#" class="item">Religious Ceremonies</a>
-                    <a href="#" class="item">Gazebo Plans</a>
-                </div>
-            </div>
-            <div class="three wide column">
-                <h4 class="ui inverted header">Services</h4>
-                <div class="ui inverted link list">
-                    <a href="#" class="item">Banana Pre-Order</a>
-                    <a href="#" class="item">DNA FAQ</a>
-                    <a href="#" class="item">How To Access</a>
-                    <a href="#" class="item">Favorite X-Men</a>
-                </div>
-            </div>
-            <div class="seven wide column">
-                <h4 class="ui inverted header">Footer Header</h4>
-                <p>Extra space for a call to action inside the footer that could help re-engage users.</p>
-            </div>
-        </div>
-    </div>
-</div>
-
-</body>
-
-</html>

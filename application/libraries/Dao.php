@@ -103,12 +103,23 @@ WHERE u.user_id = {$user_id}");
     public function insert_user($arr)
     {
         $this->valid_dao();
+        $this->db_handle->trans_start();
+        $role_id = $arr['role_id'];
+        unset($arr['role_id']);
         $ret = $this->db_handle->insert('tb_user', $arr);
         if (!$ret)
         {
             throw new Exception($this->db_handle->error()['message'], -1001);
         }
-        return $this->db_handle->get_where('tb_user', array('user_name' => $arr['user_name']));
+
+        $user_id = $this->db_handle->get_where('tb_user', array('user_name' => $arr['user_name']))->row_array()['user_id'];
+        $ret = $this->db_handle->insert('tb_role_user', ['role_id' => $role_id, 'user_id' => $user_id]);
+        if (!$ret)
+        {
+            throw new Exception($this->db_handle->error()['message'], -1001);
+        }
+        $this->db_handle->trans_complete();
+        return $ret;
     }
 
     public function insert_role_user($arr)

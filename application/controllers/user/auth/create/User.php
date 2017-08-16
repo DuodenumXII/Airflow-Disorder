@@ -23,8 +23,8 @@ class User extends CI_Controller
             $data_arr = json_decode($raw_data, true);
             $this->valid_params($data_arr);
 
-            $ret = $this->dao->insert_user($data_arr)->row_array();
-            $this->msg['data']['user_id'] = $ret['user_id'];
+            $ret = $this->dao->insert_user($data_arr);
+            $this->msg['data']['result'] = $ret;
 
             $this->output->set_content_type('application/json', 'utf-8');
             $this->output->set_output(json_encode($this->msg));
@@ -56,7 +56,22 @@ class User extends CI_Controller
 
         if (isset($arr['user_icon']) && !parse_url($arr['user_icon']))
         {
-            throw new Exception('icon is not a link', -3);
+            throw new Exception('icon is not a link', -2);
+        }
+
+        if (!isset($arr['role_id']))
+        {
+            throw new Exception('role_id is empty', 1);
+        }
+
+        if ($arr['role_id'] == 1 && (!isset($_SESSION['su']) || $_SESSION['su'] !== 1))
+        {
+            throw new Exception('administrator accounts can only be created by administrators', -3);
+        }
+
+        if (!is_numeric($arr['role_id']))
+        {
+            throw new Exception('role_id is not numeric', -2);
         }
     }
 }

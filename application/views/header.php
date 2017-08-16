@@ -14,8 +14,51 @@
     <script src="https://cdn.bootcss.com/semantic-ui/2.2.11/semantic.min.js"></script>
     <script>
         $('document').ready(function () {
-            $('.ui.modal').modal();
-            $('.ui.dropdown').dropdown();
+            $('#register-modal')
+                .modal('attach events', '#register-link')
+                .modal('setting', 'transition', 'vertical flip')
+                .modal({
+                    onApprove: function () {
+                        $.post(
+                            'http://localhost/airflow.php/user/auth/create/user',
+                            JSON.stringify({
+                                'user_name': $('#register-form [name="name"]').val(),
+                                'user_password': md5(md5($('#register-form [name="password"]').val()) + 'airflow'),
+                                'role_id': $('#register-form input:radio[name="role-id"]:checked').val()
+                            }),
+                            function (response) {
+                                console.log(response);
+                                if (!response.err_code) {
+                                    console.log('注册成功');
+                                    $('#register-err').removeClass('visible');
+                                    $('#register-modal')
+                                        .modal('hide')
+                                    ;
+                                } else {
+                                    console.log('注册失败');
+                                    $('#register-modal')
+                                        .transition('shake')
+                                    ;
+                                    $('#register-err-msg').html(response.err_msg);
+                                    $('#register-err').addClass('visible');
+                                }
+                            }
+                        );
+                        return false;
+                    }
+                })
+            ;
+            $('.ui.dropdown')
+                .dropdown()
+            ;
+            $('.message .close')
+                .on('click', function() {
+                    $(this)
+                        .closest('.message')
+                        .transition('fade')
+                    ;
+                })
+            ;
             console.log(sessionStorage.getItem('user'));
             refreshNavBar();
         });
@@ -225,25 +268,28 @@
         }
 
         function login() {
-            $('.ui.modal')
+            $('#login-modal')
                 .modal({
                     onApprove: function () {
                         console.log(md5(md5($('[name="password"]').val()) + 'airflow'));
                         $.post(
                             'http://localhost/airflow.php/user/auth/login',
-                            JSON.stringify({'name': $('[name="name"]').val(), 'password': md5(md5($('[name="password"]').val()) + 'airflow')}),
+                            JSON.stringify({'name': $('#login-form [name="name"]').val(), 'password': md5(md5($('#login-form [name="password"]').val()) + 'airflow')}),
                             function (response) {
                                 console.log(response);
                                 if (!response.err_code) {
                                     console.log('登陆成功');
                                     sessionStorage.setItem('user', JSON.stringify(response.data));
                                     refreshNavBar();
-                                    $('.ui.modal')
+                                    $('#login-err').removeClass('visible');
+                                    $('#login-modal')
                                         .modal('hide')
                                     ;
                                 } else {
                                     console.log('登陆失败');
-                                    $('.ui.modal')
+                                    $('#login-err-msg').html(response.err_msg);
+                                    $('#login-err').addClass('visible');
+                                    $('#login-modal')
                                         .transition('shake')
                                     ;
                                 }
@@ -264,7 +310,8 @@
                 function (response) {
                     if (!response.err_code) {
                         sessionStorage.removeItem('user');
-                        refreshNavBar();
+//                        refreshNavBar();
+                        location.reload();
                     } else {
                         alert(`注销失败
                         code: ${response.err_code}
@@ -317,11 +364,10 @@
                     <i class="search link icon"></i>
                 </div>
             </div>
-            <a class="login item" href="javascript:0" onclick="login()">登陆</a>
-            <a class="login item">注册</a>
+            <a class="login item" href="javascript:0" onclick="login()">登陆&nbsp/&nbsp注册</a>
             <div class="logged ui pointing dropdown link item">
-                <img class="ui avatar image" src="https://gsp0.baidu.com/5aAHeD3nKhI2p27j8IqW0jdnxx1xbK/tb/editor/images/bjq/image_editoricon16.png" id="avatar" style="margin-right: 10px">
-                <span id="user-name">Duodenum</span>
+                <img class="ui avatar image" src="" id="avatar" style="margin-right: 10px">
+                <span id="user-name"></span>
                     <i class="dropdown icon"></i>
                     <div class="menu">
                         <div class="item">个人中心</div>
@@ -369,7 +415,8 @@
 <!--    </div>-->
 <!--</div>-->
 
-<div class="ui small modal">
+<!--登陆模态框-->
+<div class="ui small modal" id="login-modal">
     <div class="ui icon header">
         <i class="user icon"></i>
         Login
@@ -382,7 +429,7 @@
                 </div>
                 <label>账号</label>
                 <div class="seven wide field">
-                    <input type="text" name="name">
+                    <input name="name">
                 </div>
             </div>
             <div class="inline fields">
@@ -395,19 +442,99 @@
                 </div>
             </div>
             <div class="inline fields">
-                <div class="nine wide field">
+                <div class="five wide field">
 
+                </div>
+                <div class="four wide field">
+                    <a href="javascript:void(0)" id="register-link">没有账号？注册</a>
                 </div>
                 <div class="three wide field actions">
                     <div class="ui purple fluid inverted approve button">登陆</div>
                 </div>
             </div>
+            <div class="inline fields">
+                <div class="four wide field">
 
+                </div>
+                <div class="eight wide field">
+                    <div class="ui error message" id="login-err" style="width: 100%; text-align: center">
+                        <i class="close icon"></i>
+                        <div id="login-err-msg"></div>
+                    </div>
+                </div>
+            </div>
             <div class="inline fields">
                 <div class="four wide field">
 
                 </div>
                 <div class="field"></div>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!--注册模态框-->
+<div class="ui small modal" id="register-modal">
+    <div class="ui icon header">
+        <i class="add user icon"></i>
+        Register
+    </div>
+    <div class="content">
+        <form class="ui fluid form" id="register-form">
+            <div class="inline fields">
+                <div class="four wide field">
+
+                </div>
+                <label>账号</label>
+                <div class="seven wide field">
+                    <input name="name">
+                </div>
+            </div>
+            <div class="inline fields">
+                <div class="four wide field">
+
+                </div>
+                <label>密码</label>
+                <div class="seven wide field">
+                    <input type="password" name="password">
+                </div>
+            </div>
+            <div class="inline fields">
+                <div class="four wide field">
+
+                </div>
+                <label>账户类型</label>
+                <div class="field">
+                    <div class="ui radio checkbox">
+                        <input type="radio" name="role-id" tabindex="0" value="2">
+                        <label>企业</label>
+                    </div>
+                </div>
+                <div class="field">
+                    <div class="ui radio checkbox">
+                        <input type="radio" name="role-id" tabindex="0" value="3">
+                        <label>个人</label>
+                    </div>
+                </div>
+            </div>
+            <div class="inline fields">
+                <div class="nine wide field">
+
+                </div>
+                <div class="three wide field actions">
+                    <div class="ui purple fluid inverted approve button">注册</div>
+                </div>
+            </div>
+            <div class="inline fields">
+                <div class="four wide field">
+
+                </div>
+                <div class="eight wide field">
+                    <div class="ui error message" id="register-err" style="width: 100%; text-align: center">
+                        <i class="close icon"></i>
+                        <div id="register-err-msg"></div>
+                    </div>
+                </div>
             </div>
         </form>
     </div>

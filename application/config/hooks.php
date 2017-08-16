@@ -28,7 +28,12 @@ $hook['post_controller_constructor'] []= function () {
     try {
         $CI =& get_instance();
         $uri = $CI->uri->uri_string();
-        $white_list = ['user/auth'];
+        $white_list = ['user/auth', 'home'];
+
+        if (strlen($uri) == 0)
+        {
+            return;
+        }
 
         foreach ($white_list as $item)
         {
