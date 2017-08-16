@@ -321,7 +321,7 @@
             <a class="login item">注册</a>
             <div class="logged ui pointing dropdown link item">
                 <img class="ui avatar image" src="https://gsp0.baidu.com/5aAHeD3nKhI2p27j8IqW0jdnxx1xbK/tb/editor/images/bjq/image_editoricon16.png" id="avatar" style="margin-right: 10px">
-                <span class="text" id="user-name">Duodenum</span>
+                <span id="user-name">Duodenum</span>
                     <i class="dropdown icon"></i>
                     <div class="menu">
                         <div class="item">个人中心</div>
