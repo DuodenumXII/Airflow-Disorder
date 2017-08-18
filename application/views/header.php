@@ -268,6 +268,8 @@
         }
 
         function login() {
+            $('#login-err').removeClass('visible');
+            $('#register-err').removeClass('visible');
             $('#login-modal')
                 .modal({
                     onApprove: function () {

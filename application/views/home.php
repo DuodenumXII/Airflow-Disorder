@@ -2,7 +2,7 @@
     $(document).ready(function(){
         $('.menu .item').tab();
         $('[name$="time"]').val(getNowFormatDate());
-        $('title').html('Airflow-Disorder首页');
+        $('title').html('Airflow-Disorder | 首页');
     });
 
     function exchange(a, b) {
@@ -50,14 +50,14 @@
                     <div class="inline fields">
                         <div class="field">
                             <div class="ui radio checkbox">
-                                <input type="radio" name="return" id="return-no" checked="checked">
-                                <label for="return-no">单程</label>
+                                <input type="radio" name="return" id="plane-local-return-no" checked="checked">
+                                <label for="plane-local-return-no">单程</label>
                             </div>
                         </div>
                         <div class="field">
                             <div class="ui radio checkbox">
-                                <input type="radio" name="return" id="return-yes">
-                                <label for="return-yes">往返</label>
+                                <input type="radio" name="return" id="plane-local-return-yes">
+                                <label for="plane-local-return-yes">往返</label>
                             </div>
                         </div>
                     </div>
@@ -97,7 +97,7 @@
                             <div class="field">
                                 <div class="ui icon labeled input">
                                     <div class="ui label">日期</div>
-                                    <input type="date" name="dep-time">
+                                    <input type="date" name="arr-time">
                                     <i class="ui icon calendar"></i>
                                 </div>
                             </div>
@@ -119,8 +119,13 @@
 
                         </div>
                         <div class="field">
-                            <div class="ui primary button">
-                                立即查询
+                            <div class="ui primary animated button">
+                                <div class="visible content">
+                                    立即查询
+                                </div>
+                                <div class="hidden content">
+                                    暂不开放
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -134,14 +139,14 @@
                     <div class="inline fields">
                         <div class="field">
                             <div class="ui radio checkbox">
-                                <input type="radio" name="return" id="return-no" checked="checked">
-                                <label for="return-no">单程</label>
+                                <input type="radio" name="return" id="plane-foreign-return-no" checked="checked">
+                                <label for="plane-foreign-return-no">单程</label>
                             </div>
                         </div>
                         <div class="field">
                             <div class="ui radio checkbox">
-                                <input type="radio" name="return" id="return-yes">
-                                <label for="return-yes">往返</label>
+                                <input type="radio" name="return" id="plane-foreign-return-yes">
+                                <label for="plane-foreign-return-yes">往返</label>
                             </div>
                         </div>
                     </div>
@@ -181,7 +186,7 @@
                             <div class="field">
                                 <div class="ui icon labeled input">
                                     <div class="ui label">日期</div>
-                                    <input type="date" name="dep-time">
+                                    <input type="date" name="arr-time">
                                     <i class="ui icon calendar"></i>
                                 </div>
                             </div>
@@ -203,8 +208,13 @@
 
                         </div>
                         <div class="field">
-                            <div class="ui primary button">
-                                立即查询
+                            <div class="ui primary animated button">
+                                <div class="visible content">
+                                    立即查询
+                                </div>
+                                <div class="hidden content">
+                                    暂不开放
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -338,9 +348,12 @@
                         <div class="four wide field">
 
                         </div>
-                        <div class="field">
-                            <div class="ui primary button">
+                        <div class="ui primary animated button">
+                            <div class="visible content">
                                 立即查询
+                            </div>
+                            <div class="hidden content">
+                                暂不开放
                             </div>
                         </div>
                     </div>
@@ -395,9 +408,12 @@
                         <div class="four wide field">
 
                         </div>
-                        <div class="field">
-                            <div class="ui primary button">
+                        <div class="ui primary animated button">
+                            <div class="visible content">
                                 立即查询
+                            </div>
+                            <div class="hidden content">
+                                暂不开放
                             </div>
                         </div>
                     </div>
@@ -479,14 +495,14 @@
                     <div class="inline fields">
                         <div class="field">
                             <div class="ui radio checkbox">
-                                <input type="radio" name="return" id="return-no" checked="checked">
-                                <label for="return-no">单程</label>
+                                <input type="radio" name="return" id="train-return-no" checked="checked" value="0">
+                                <label for="train-return-no">单程</label>
                             </div>
                         </div>
                         <div class="field">
                             <div class="ui radio checkbox">
-                                <input type="radio" name="return" id="return-yes">
-                                <label for="return-yes">往返</label>
+                                <input type="radio" name="return" id="train-return-yes" value="1">
+                                <label for="train-return-yes">往返</label>
                             </div>
                         </div>
                     </div>
@@ -526,7 +542,7 @@
                             <div class="field">
                                 <div class="ui icon labeled input">
                                     <div class="ui label">日期</div>
-                                    <input type="date" name="dep-time">
+                                    <input type="date" name="arr-time">
                                     <i class="ui icon calendar"></i>
                                 </div>
                             </div>
@@ -548,8 +564,13 @@
 
                         </div>
                         <div class="field">
-                            <div class="ui primary button">
-                                立即查询
+                            <div class="ui primary animated button">
+                                <div class="visible content">
+                                    立即查询
+                                </div>
+                                <div class="hidden content">
+                                    暂不开放
+                                </div>
                             </div>
                         </div>
                     </div>
