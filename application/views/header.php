@@ -276,7 +276,10 @@
                         console.log(md5(md5($('[name="password"]').val()) + 'airflow'));
                         $.post(
                             'http://localhost/airflow.php/user/auth/login',
-                            JSON.stringify({'name': $('#login-form [name="name"]').val(), 'password': md5(md5($('#login-form [name="password"]').val()) + 'airflow')}),
+                            JSON.stringify({
+                                'name': $('#login-form [name="name"]').val(),
+                                'password': md5(md5($('#login-form [name="password"]').val()) + 'airflow')
+                            }),
                             function (response) {
                                 console.log(response);
                                 if (!response.err_code) {
@@ -352,7 +355,7 @@
 <body>
 
 <!-- Following Menu -->
-<div class="ui purple inverted borderless menu">
+<div class="ui purple inverted borderless nav menu">
     <div class="ui container">
         <a class="active item">首页</a>
         <a class="item">机票</a>
@@ -514,7 +517,7 @@
                 </div>
                 <div class="field">
                     <div class="ui radio checkbox">
-                        <input type="radio" name="role-id" tabindex="0" value="3">
+                        <input type="radio" name="role-id" tabindex="0" checked="checked" value="3">
                         <label>个人</label>
                     </div>
                 </div>

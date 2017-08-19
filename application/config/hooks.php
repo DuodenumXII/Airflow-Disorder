@@ -27,8 +27,10 @@ $hook['pre_system'] []= function () {
 $hook['post_controller_constructor'] []= function () {
     try {
         $CI =& get_instance();
+        $CI->load->config('white_list');
         $uri = $CI->uri->uri_string();
-        $white_list = ['user/auth', 'home'];
+        $white_list = $CI->config->item('white_list');
+        $white_list_limited = $CI->config->item('white_list_limited');
 
         if (strlen($uri) == 0)
         {
@@ -46,6 +48,13 @@ $hook['post_controller_constructor'] []= function () {
         {
             if ($_SESSION['su'] === 0)
             {
+                foreach ($white_list_limited as $item)
+                {
+                    if (strpos($uri, $item) === 0) {
+                        return;
+                    }
+                }
+
                 foreach ($_SESSION['perm'] as $item) {
                     if (strpos($uri, $item['uri']) === 0) {
                         return;
