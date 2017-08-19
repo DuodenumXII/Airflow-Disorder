@@ -65,8 +65,13 @@
         }
 
         function buy_ticket(e) {
-            var data = e.getAttribute('data-info').split('&');
-            alert(data);
+            var data = $(e).attr('data-info').split('&');
+            var name, start, end, seatClass;
+            [name, start, end, seatClass] = data;
+            $('#order-modal')
+                .modal('show')
+            ;
+
             return false;
         }
     </script>
@@ -90,6 +95,18 @@
             </div>
             <a class="item">登陆</a>
             <a class="item">注册</a>
+        </div>
+    </div>
+</div>
+
+<div class="ui basic modal" id="order-modal">
+    <div class="ui icon header">
+        <i class="ui browser icon"></i>
+        订单信息
+    </div>
+    <div class="content">
+        <div class="ui bulleted list" id="order-info">
+
         </div>
     </div>
 </div>

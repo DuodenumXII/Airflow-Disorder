@@ -24,7 +24,7 @@ class Order extends CI_Controller
             $data_arr = json_decode($raw_data, true);
             $this->valid_params($data_arr);
 
-            $ret = $this->dao->insert_order($data_arr)->result_array();
+            $ret = $this->dao->insert_order($data_arr)->row_array();
             $this->msg['data']['result'] = $ret;
 
             $this->output->set_output(json_encode($this->msg));

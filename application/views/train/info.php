@@ -73,7 +73,7 @@
                     {
                         seat_class += `<p>${temp['price_type']}<span style="color:red">￥${temp['price']}</span></p>
 `;
-                        button += `<p><a href="javascript:void(0);" onclick="buyTicket(this)" data-info="${name}&${start}&${end}&${temp['price_type']}&${temp['price']}">购票</a></p>
+                        button += `<p><a href="javascript:void(0);" onclick="buyTicket(this)" data-info="${name}&${start}&${end}&${temp['price_type']}&${temp['price']}&${start_time}&${end_time}">购票</a></p>
 `;
                     }
                 });
@@ -131,8 +131,66 @@
     }
 
     function buyTicket(e) {
-        var data = e.getAttribute('data-info').split('&');
-        alert(data);
+        var data = $(e).attr('data-info').split('&');
+        var name, start, end, priceType, price, startTime, endTime;
+        [name, start, end, priceType, price, startTime, endTime] = data;
+        var date = $('[name="dep-time"]').val();
+        $.post(
+            '/airflow.php/user/create/order',
+            JSON.stringify({
+                'type': 'train',
+                'seller': '25',
+                'price': price,
+                'detail': {
+                    '席次': priceType,
+                    '起始时间': `${date} ${startTime}-${endTime}`
+                }
+            }),
+            function (response) {
+                console.log(response);
+                var listHtml = '';
+                if (!response.err_code) {
+                    listHtml = `<div class="item">订单号: ${response.data.result.order_id}</div>
+<div class="item">类型: 火车票</div>
+<div class="item">价格: ￥${response.data.result.price}</div>
+<div class="item">状态: 未支付</div>
+<div class="item">类型: 火车票</div>
+`;
+                    $.each(JSON.parse(response.data.result.detail), function (index, item) {
+                        listHtml += `<div class="item">${index}: ${item}</div>
+                                `;
+                    });
+                    $('#order-info').html(listHtml);
+                    $('#order-modal')
+                        .modal({
+                            onApprove: function () {
+                                $.post(
+                                    '/airflow.php/user/pay/order',
+                                    JSON.stringify({
+                                        'money': response.data.result.price,
+                                        'order_id': response.data.result.order_id
+                                    }),
+                                    function (response) {
+                                        console.log(response);
+                                        if (!response.err_code) {
+                                            if (response.data.result == true) {
+                                                $('#success-modal').modal('show');
+                                            }
+                                        } else {
+                                            $('#error-modal .msg').html(response.err_msg);
+                                            $('#error-modal').modal('show');
+                                        }
+                                    }
+                                );
+                            }
+                        })
+                        .modal('setting', 'closable', false)
+                        .modal('show')
+                    ;
+                }
+            }
+        );
+
         return false;
     }
 
@@ -162,6 +220,47 @@
         );
     }
 </script>
+
+<div class="ui basic modal" id="order-modal">
+    <div class="ui icon header">
+        <i class="ui browser icon"></i>
+        订单信息
+    </div>
+    <div class="content">
+        <div class="ui container" style="border: 1px solid white; padding: 5%;">
+            <div class="ui bulleted list" id="order-info">
+
+            </div>
+        </div>
+        <div class="actions" style="padding-top: 50px">
+            <div class="ui red basic cancel inverted right floated button">
+                <i class="remove icon"></i>
+                取消
+            </div>
+            <div class="ui green ok inverted right floated button">
+                <i class="checkmark icon"></i>
+                支付
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="ui basic modal" id="success-modal">
+    <div class="ui icon header">
+        <i class="checkmark icon"></i>
+        支付成功<br>
+        <div class="msg"></div>
+    </div>
+</div>
+
+<div class="ui basic modal" id="error-modal">
+    <div class="ui icon header">
+        <i class="warning sign icon"></i>
+        支付失败<br>
+        <div class="msg"></div>
+    </div>
+</div>
+
 <div class="ui container">
     <div class="ui form">
         <div class="inline fields">
