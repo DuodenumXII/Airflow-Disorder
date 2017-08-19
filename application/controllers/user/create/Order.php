@@ -65,6 +65,6 @@ class Order extends CI_Controller
             throw new Exception('detail is not array', -2);
         }
 
-        $arr['detail'] = json_encode($arr['detail']);
+        $arr['detail'] = json_encode($arr['detail'], JSON_UNESCAPED_UNICODE);
     }
 }

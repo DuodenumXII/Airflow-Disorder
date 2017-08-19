@@ -133,6 +133,10 @@ WHERE u.user_id = {$user_id}");
         return $ret;
     }
 
+    /*
+     * status: 0 => 未支付; 1 => 已支付; 2 => 已取消;
+     */
+
     public function insert_order($arr)
     {
         $this->valid_dao();
@@ -145,5 +149,17 @@ WHERE u.user_id = {$user_id}");
             throw new Exception($this->db_handle->error()['message'], -1001);
         }
         return $this->db_handle->get_where('tb_order', array('order_id' => $arr['order_id']));
+    }
+
+    public function pay_order($arr)
+    {
+        $this->valid_dao();
+        $ret = $this->db_handle->where(array('order_id' => $arr['order_id']))
+            ->update('tb_order', array('status' => 1));
+        if (!$ret)
+        {
+            throw new Exception($this->db_handle->error()['message'], -1001);
+        }
+        return $ret;
     }
 }
