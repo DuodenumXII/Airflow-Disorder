@@ -22,6 +22,7 @@ $hook['pre_system'] []= function () {
         }
         session_start();
     }
+    date_default_timezone_set('Asia/Shanghai');
 };
 
 $hook['post_controller_constructor'] []= function () {
@@ -65,7 +66,7 @@ $hook['post_controller_constructor'] []= function () {
             return;
         }
 
-        throw new Exception('permission denied!', -2000);
+        throw new Exception('please login!', -2000);
     } catch (Exception $e) {
         $CI->output->set_content_type('application/json', 'utf-8');
         $CI->output->set_output(json_encode(['err_code' => $e->getCode(), 'err_msg' => $e->getMessage()]))->_display();

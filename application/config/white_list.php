@@ -13,3 +13,4 @@ $config['white_list'] []= 'user/query';
 $config['white_list'] []= 'home';
 
 $config['white_list_limited'] = array();
+$config['white_list_limited'] []= 'user/create/order';

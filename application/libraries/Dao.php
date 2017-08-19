@@ -132,4 +132,18 @@ WHERE u.user_id = {$user_id}");
         }
         return $ret;
     }
+
+    public function insert_order($arr)
+    {
+        $this->valid_dao();
+        $arr['order_id'] = uniqid();
+        $arr['uid'] = $_SESSION['user']['user_id'];
+        $arr['end_time'] = date('Y-m-d H:i:s', strtotime('+45 min'));
+        $ret = $this->db_handle->insert('tb_order',$arr);
+        if (!$ret)
+        {
+            throw new Exception($this->db_handle->error()['message'], -1001);
+        }
+        return $this->db_handle->get_where('tb_order', array('order_id' => $arr['order_id']));
+    }
 }
