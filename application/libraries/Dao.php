@@ -195,4 +195,15 @@ WHERE u.user_id = {$user_id}");
         }
         return $ret;
     }
+
+    public function update_admin_todo($arr)
+    {
+        $this->valid_dao();
+        $ret = $this->db_handle->update('tb_admin_todo', array('status' => $arr['status']), array('id' => $arr['id']));
+        if (!$ret)
+        {
+            throw new Exception($this->db_handle->error()['message'], -1001);
+        }
+        return $ret;
+    }
 }
