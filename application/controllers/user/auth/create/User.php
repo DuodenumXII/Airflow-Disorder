@@ -23,7 +23,21 @@ class User extends CI_Controller
             $data_arr = json_decode($raw_data, true);
             $this->valid_params($data_arr);
 
-            $ret = $this->dao->insert_user($data_arr);
+            $ret = $this->dao->query_user_exist(array('user_name' => $data_arr['user_name']))->result_array();
+            if (count($ret) != 0)
+            {
+                throw new Exception('用户名已存在', -1001);
+            }
+
+//            $ret = $this->dao->insert_user($data_arr);
+            $ret = $this->dao->insert_admin_todo(array(
+                'type' => '注册',
+                'from' => 0,
+                'func' => 'insert_user',
+                'param' => json_encode($data_arr, JSON_UNESCAPED_UNICODE),
+                'status' => 0,
+                'detail' => json_encode(array(), JSON_UNESCAPED_UNICODE)
+            ));
             $this->msg['data']['result'] = $ret;
 
             $this->output->set_content_type('application/json', 'utf-8');

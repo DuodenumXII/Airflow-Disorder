@@ -29,7 +29,7 @@
                             function (response) {
                                 console.log(response);
                                 if (!response.err_code) {
-                                    console.log('注册成功');
+                                    console.log('已提交申请，等待管理员审核');
                                     $('#register-err').removeClass('visible');
                                     $('#register-modal')
                                         .modal('hide')
