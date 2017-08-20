@@ -1,8 +1,66 @@
 <script>
     $(document).ready(function () {
+        $('title').html('Airflow-Disorder | 个人中心');
         $('#user-icon').attr('src', $('#avatar').attr('src'));
         $('#huge-user-name').html($('#user-name').html());
+        $.post(
+            '/airflow.php/user/query/todo',
+            JSON.stringify({'status': 0}),
+            function (response) {
+                console.log(response);
+                if (!response.err_code) {
+                    $.each(response.data.result, function (index, item) {
+                        var cardHtml = `<div class="ui segment" data-id="${item.id}">
+            <div class="ui bulleted list" id="order-info"">
+                <div class="item">id: ${item.id}</div>
+                <div class="item">类型: ${item.type}</div>
+                <div class="item">状态: 待办</div>
+                {detail}
+                <div class="item">创建时间: ${item.create_time}</div>
+            </div>
+        </div>
+        <div class="ui borderless operation menu" data-id="${item.id}">
+            <a class="item" data-id="${item.id}" data-value="1" onclick="submitOperation(this)">同意</a>
+            <a class="item" data-id="${item.id}" data-value="2" onclick="submitOperation(this)">拒绝</a>
+            <a class="item" data-id="${item.id}" data-value="3" onclick="submitOperation(this)">忽略</a>
+            <a class="item" data-id="${item.id}" data-value="4" onclick="submitOperation(this)">删除</a>
+        </div>
+`;
+                        var detail = JSON.parse(item.detail);
+                        var detailHtml = '';
+                        $.each(detail, function (index, item) {
+                            detailHtml += `<div class="item">${index}: ${item}</div>
+                            `;
+                        });
+                        cardHtml = cardHtml.replace('{detail}', detailHtml);
+                        $('#func-area').append(cardHtml);
+                    });
+                };
+            }
+        );
     });
+
+    function submitOperation(e) {
+        $.post(
+            '/airflow.php/user/update/todo',
+            JSON.stringify({
+                'id': $(e).attr('data-id'),
+                'status': $(e).attr('data-value')
+            }),
+            function (response) {
+                console.log(response);
+                if (response.data.result == true) {
+                    console.log('审批成功');
+                    console.log(`[data-id="${$(e).attr('data-id')}"]`);
+                    $(`[data-id="${$(e).attr('data-id')}"]`).hide();
+                } else {
+                    console.log('审批失败，' + response.err_msg);
+                    console.log(`[data-id="${$(e).attr('data-id')}"]`);
+                    $(`[data-id="${$(e).attr('data-id')}"]`).hide();
+                }
+            }
+        );
+    }
 </script>
 
 <div class="ui grid divided container">
@@ -11,30 +69,19 @@
         <div class="ui huge header" id="huge-user-name"></div>
         <div class="ui vertical fluid menu">
             <a class="active teal item">
-                收件箱
-                <div class="ui teal left pointing label">1</div>
+                待办事项
             </a>
             <a class="item">
-                垃圾箱
-                <div class="ui label">51</div>
+                已处理
+                <div class="ui label" id="processed-num">0</div>
             </a>
             <a class="item">
-                更新
-                <div class="ui label">1</div>
+                未处理
+                <div class="ui label" id="todo-num">0</div>
             </a>
-            <div class="item">
-                <div class="ui transparent icon input">
-                    <input type="text" placeholder="搜索邮件...">
-                    <i class="search icon"></i>
-                </div>
-            </div>
         </div>
     </div>
-    <div class="ui container twelve wide column">
-        <h2 class="ui header" id="func-area">Dogs Roles with Humans</h2>
-        <p>Domestic dogs inherited complex behaviors, such as bite inhibition, from their wolf ancestors, which would have been pack hunters with complex body language. These sophisticated forms of social cognition and communication may account for their trainability, playfulness, and ability to fit into human households and social situations, and these attributes have given dogs a relationship with humans that has enabled them to become one of the most successful species on the planet today.
-
-            The dogs' value to early human hunter-gatherers led to them quickly becoming ubiquitous across world cultures. Dogs perform many roles for people, such as hunting, herding, pulling loads, protection, assisting police and military, companionship, and, more recently, aiding handicapped individuals. This impact on human society has given them the nickname "man's best friend" in the Western world. In some cultures, however, dogs are also a source of meat.</p>
-        <p></p>
+    <div class="ui container twelve wide column" id="func-area">
+        <h2 class="ui header">待办事项</h2>
     </div>
 </div>

@@ -36,7 +36,10 @@ class User extends CI_Controller
                 'func' => 'insert_user',
                 'param' => json_encode($data_arr, JSON_UNESCAPED_UNICODE),
                 'status' => 0,
-                'detail' => json_encode(array(), JSON_UNESCAPED_UNICODE)
+                'detail' => json_encode(array(
+                    '注册角色' => $data_arr['role_id'],
+                    '用户名' => $data_arr['user_name']
+                ), JSON_UNESCAPED_UNICODE)
             ));
             $this->msg['data']['result'] = $ret;
 

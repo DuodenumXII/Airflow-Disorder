@@ -24,6 +24,14 @@ class Todo extends CI_Controller
             $data_arr = json_decode($raw_data, true);
             $this->valid_params($data_arr);
 
+            if ($data_arr['status'] == 1)
+            {
+                $ret = $this->dao->query_admin_todo(array('id' => $data_arr['id']))->row_array();
+                $func = $ret['func'];
+                $param = json_decode($ret['param'], true);
+                $this->dao->$func($param);
+            }
+
             $ret = $this->dao->update_admin_todo($data_arr);
             $this->msg['data']['result'] = $ret;
 
@@ -39,7 +47,7 @@ class Todo extends CI_Controller
         {
             throw new Exception('status is empty', -1);
         }
-        if (!in_array($arr['status'], ['0', '1', '2', '3']))
+        if (!in_array($arr['status'], ['0', '1', '2', '3', '4']))
         {
             throw new Exception('illegal status', -2);
         }
