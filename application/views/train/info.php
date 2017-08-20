@@ -142,6 +142,8 @@
                 'seller': '25',
                 'price': price,
                 'detail': {
+                    '车次': name,
+                    '路线': `${start} - ${end}`,
                     '席次': priceType,
                     '起始时间': `${date} ${startTime}-${endTime}`
                 }
@@ -151,15 +153,15 @@
                 var listHtml = '';
                 if (!response.err_code) {
                     listHtml = `<div class="item">订单号: ${response.data.result.order_id}</div>
-<div class="item">类型: 火车票</div>
-<div class="item">价格: ￥${response.data.result.price}</div>
-<div class="item">状态: 未支付</div>
-<div class="item">类型: 火车票</div>
-`;
+<div class="item">类型: 火车票</div>`;
                     $.each(JSON.parse(response.data.result.detail), function (index, item) {
                         listHtml += `<div class="item">${index}: ${item}</div>
                                 `;
                     });
+                    listHtml += `
+<div class="item">价格: ￥${response.data.result.price}</div>
+<div class="item">状态: 未支付</div>
+`;
                     $('#order-info').html(listHtml);
                     $('#order-modal')
                         .modal({
