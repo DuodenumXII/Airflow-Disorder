@@ -81,7 +81,7 @@
             </a>
         </div>
     </div>
-    <div class="ui container twelve wide column" id="func-area">
+    <div class="ui container twelve wide column" id="func-area" style="padding: 3%">
         <h2 class="ui header">待办事项</h2>
     </div>
 </div>
