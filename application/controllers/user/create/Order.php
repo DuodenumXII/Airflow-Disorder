@@ -44,24 +44,30 @@ class Order extends CI_Controller
             throw new Exception('illegal type', -2);
         }
 
-        if (!isset($arr['seller'])) {
+        if (!isset($arr['seller']))
+        {
             throw new Exception('seller is empty', -1);
         }
-        if (!is_numeric($arr['seller'])) {
+        if (!is_numeric($arr['seller']))
+        {
             throw new Exception('seller is not numeric', -2);
         }
 
-        if (!isset($arr['price'])) {
+        if (!isset($arr['price']))
+        {
             throw new Exception('price is empty', -1);
         }
-        if (!is_numeric($arr['price'])) {
+        if (!is_numeric($arr['price']))
+        {
             throw new Exception('price is not numeric', -2);
         }
 
-        if (!isset($arr['detail'])) {
+        if (!isset($arr['detail']))
+        {
             throw new Exception('detail is empty', -1);
         }
-        if (!is_array($arr['detail'])) {
+        if (!is_array($arr['detail']))
+        {
             throw new Exception('detail is not array', -2);
         }
 

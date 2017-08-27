@@ -111,7 +111,7 @@
     </div>
 </div>
 
-<a class="ui container">
+<div class="ui container">
     <div class="ui form">
         <div class="inline fields">
             <div class="field">

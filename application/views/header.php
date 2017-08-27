@@ -316,7 +316,7 @@
                     if (!response.err_code) {
                         sessionStorage.removeItem('user');
 //                        refreshNavBar();
-                        location.reload();
+                        location.href = '/airflow.php/home';
                     } else {
                         alert(`注销失败
                         code: ${response.err_code}
@@ -357,7 +357,7 @@
 <!-- Following Menu -->
 <div class="ui purple inverted borderless nav menu">
     <div class="ui container">
-        <a class="active item">首页</a>
+        <a class="active item" href="/airflow.php/home">首页</a>
         <a class="item">机票</a>
         <a class="item">酒店</a>
         <a class="item">火车票</a>
@@ -375,8 +375,8 @@
                 <span id="user-name"></span>
                     <i class="dropdown icon"></i>
                     <div class="menu">
-                        <div class="item">个人中心</div>
-                        <div class="item" onclick="logout()">注销</div>
+                        <a class="item" href="/airflow.php/user/usercenter">个人中心</a>
+                        <a class="item" onclick="logout()">注销</a>
                     </div>
             </div>
         </div>
