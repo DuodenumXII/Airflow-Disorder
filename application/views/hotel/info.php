@@ -6,8 +6,8 @@
                 'commodity_id': location.href.split('?')[1].split('=')[1]
             }),
             function (response) {
+                console.log(response);
                 $.each(response.data.result, function (index, item) {
-                    console.log(item);
                     $('#commodity-title').html(item.name);
                     $('#commodity-subtitle').html(item.subtitle);
                     $('#commodity-title-image').attr('src', item.title_image);
@@ -18,14 +18,14 @@
             }
         );
     });
-    
+
     function buyCommodity() {
         var id = location.href.split('?')[1].split('=')[1];
         console.log($('#commodity-price').val());
         $.post(
             '/airflow.php/user/create/order',
             JSON.stringify({
-                'type': 'commodity',
+                'type': 'hotel',
                 'seller': 25,
                 'price': $('#commodity-price').html(),
                 'detail': {
@@ -37,7 +37,7 @@
                 var listHtml = '';
                 if (!response.err_code) {
                     listHtml = `<div class="item">订单号: ${response.data.result.order_id}</div>
-<div class="item">类型: 商品</div>`;
+<div class="item">类型: 酒店</div>`;
                     $.each(JSON.parse(response.data.result.detail), function (index, item) {
                         listHtml += `<div class="item">${index}: ${item}</div>
                                 `;
@@ -139,7 +139,6 @@
                 <a href="http://www.sbnk.cn/" target="_blank">点击这里</a>。
             </p>
         </div>
-        <div id="commodity-seller-id" style="display:none"></div>
         <div class="ui positive basic huge right floated button" id="commodity-buy" onclick="buyCommodity()">立即购买</div>
     </div>
 

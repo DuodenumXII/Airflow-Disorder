@@ -217,4 +217,38 @@ WHERE u.user_id = {$user_id}");
         }
         return $ret;
     }
+
+    public function query_commodity($arr)
+    {
+        $this->valid_dao();
+        $ret = $this->db_handle->get_where('tb_commodity', $arr);
+        if (!$ret)
+        {
+            throw new Exception($this->db_handle->error()['message'], -1001);
+        }
+        return $ret;
+    }
+
+    public function query_order($id)
+    {
+        $this->valid_dao();
+        $ret = $this->db_handle->get_where('tb_order', array('uid' => $id));
+        if (!$ret)
+        {
+            throw new Exception($this->db_handle->error()['message'], -1001);
+        }
+        return $ret;
+    }
+
+    public function update_order($arr)
+    {
+        $this->valid_dao();
+        $ret = $this->db_handle->where(array('order_id' => $arr['order_id']))
+            ->update('tb_order', array('status' => $arr['status']));
+        if (!$ret)
+        {
+            throw new Exception($this->db_handle->error()['message'], -1001);
+        }
+        return $ret;
+    }
 }

@@ -1,13 +1,18 @@
 <script>
     $(document).ready(function(){
         $('title').html('Airflow-Disorder火车票查询');
-        $.post(
-            '/airflow.php/user/query/trains2s',
-            JSON.stringify({'start': '北京', 'end': '上海', 'date': '+2 day'}),
-            function (response) {
-                updateInfoList(response);
-            }
-        );
+        $('#info-list tbody').hide();
+        if (sessionStorage.getItem('train')) {
+            var train = JSON.parse(sessionStorage.getItem('train'));
+            $.post(
+                '/airflow.php/user/query/trains2s',
+                JSON.stringify({'start': train.start, 'end': train.end, 'date': train.date}),
+                function (response) {
+                    updateInfoList(response);
+                    sessionStorage.removeItem('train');
+                }
+            );
+        }
         $('.ui.dropdown')
             .dropdown()
         ;
@@ -122,7 +127,7 @@
                 .popup({
                     on: 'click',
                     position: 'bottom center',
-                    lastResort: 'botto'
+                    lastResort: 'bottom'
                 })
             ;
             return;
@@ -313,9 +318,6 @@
             <th>操作</th>
         </tr></thead>
         <tbody style="display: none">
-        <div class="ui active inverted dimmer" id="main-loader">
-            <div class="ui text loader">加载</div>
-        </div>
         </tbody>
     </table>
 </div>

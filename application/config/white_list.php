@@ -8,9 +8,15 @@
 
 $config['white_list'] = array();
 $config['white_list'] []= 'user/auth';
-$config['white_list'] []= 'train/info';
+$config['white_list'] []= 'train';
 $config['white_list'] []= 'user/query';
 $config['white_list'] []= 'home';
+$config['white_list'] []= 'commodity';
+$config['white_list'] []= 'hotel';
 
 $config['white_list_limited'] = array();
 $config['white_list_limited'] []= 'user/create/order';
+$config['white_list_limited'] []= 'user/query/order';
+$config['white_list_limited'] []= 'user/update/order';
+$config['white_list_limited'] []= 'user/usercenter';
+

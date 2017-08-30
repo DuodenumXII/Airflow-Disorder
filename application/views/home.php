@@ -26,6 +26,38 @@
         var currentdate = year + seperator1 + month + seperator1 + strDate;
         return currentdate;
     }
+
+    function queryTrainInfo() {
+        sessionStorage.setItem(
+            'train',
+            JSON.stringify({
+                'start': $('#train-s2s-form [name="start"]').val(),
+                'end': $('#train-s2s-form [name="end"]').val(),
+                'date': $('#train-s2s-form [name="dep-time"]').val(),
+            })
+        );
+        location.href = '/airflow.php/train/info';
+    }
+
+    function queryCommodity() {
+        sessionStorage.setItem(
+            'commodity',
+            JSON.stringify({
+                'city': $('#travel-form [name="destination"]').val()
+            })
+        );
+        location.href = '/airflow.php/commodity/searchlist';
+    }
+
+    function queryHotel() {
+        sessionStorage.setItem(
+            'hotel',
+            JSON.stringify({
+                'city': $('#hotel-form [name="city"]').val()
+            })
+        );
+        location.href = '/airflow.php/hotel/searchlist';
+    }
 </script>
 
 <div class="ui container">
@@ -231,7 +263,7 @@
             <!--        酒店搜索-->
 
             <div class="ui bottom attached active tab segment" data-tab="hotel/search">
-                <form class="ui form">
+                <form class="ui form" id="hotel-form">
                     <div class="inline fields">
                         <div class="field">
                             <div class="ui radio checkbox">
@@ -292,7 +324,7 @@
 
                         </div>
                         <div class="field">
-                            <div class="ui primary button">
+                            <div class="ui primary button" onclick="queryHotel()">
                                 立即查询
                             </div>
                         </div>
@@ -480,7 +512,7 @@
 
                         </div>
                         <div class="field">
-                            <div class="ui primary button" onclick="submit_form('#train-s2s-form')">
+                            <div class="ui primary button" onclick="queryTrainInfo()">
                                 立即查询
                             </div>
                         </div>
@@ -579,7 +611,7 @@
         </div>
 
         <div class="ui bottom attached tab segment" data-tab="travel">
-            <form class="ui form">
+            <form class="ui form" id="travel-form">
                 <br>
                 <div class="inline fields">
                     <div class="four wide field">
@@ -612,7 +644,7 @@
 
                     </div>
                     <div class="field">
-                        <div class="ui primary button">
+                        <div class="ui primary button" onclick="queryCommodity()">
                             立即查询
                         </div>
                     </div>
