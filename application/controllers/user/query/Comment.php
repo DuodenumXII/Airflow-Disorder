@@ -14,6 +14,7 @@ class Comment extends CI_Controller
     {
         parent::__construct();
         $this->load->library('dao');
+        $this->load->helper('valid_params');
         $this->output->set_content_type('application/json', 'utf-8');
     }
 
@@ -24,7 +25,7 @@ class Comment extends CI_Controller
             $data_arr = json_decode($raw_data, true);
             $this->valid_params($data_arr);
 
-            $ret = $this->dao->query_comment($data_arr)->result_array();
+            $ret = $this->dao->query_comment($data_arr['commodity_id'])->result_array();
             $this->msg['data']['result'] = $ret;
 
             $this->output->set_output(json_encode($this->msg));

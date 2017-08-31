@@ -263,10 +263,17 @@ WHERE u.user_id = {$user_id}");
         return $ret;
     }
 
-    public function query_comment($arr)
+    public function query_comment($commodity_id)
     {
         $this->valid_dao();
-        $ret = $this->db_handle->get_where('tb_comment', $arr);
+        $sql = "SELECT cmt.id, cmt.user_id, usr.user_name, usr.user_icon, cmt.parent
+	, cmt.content
+FROM tb_commodity cmd
+	LEFT JOIN tb_comment cmt ON cmt.commodity_id = cmd.commodity_id
+	LEFT JOIN tb_user usr ON usr.user_id = cmt.user_id
+WHERE !isnull(cmt.id)
+	AND cmd.commodity_id = {$commodity_id}";
+        $ret = $this->db_handle->query($sql);
         if (!$ret)
         {
             throw new Exception($this->db_handle->error()['message'], -1001);

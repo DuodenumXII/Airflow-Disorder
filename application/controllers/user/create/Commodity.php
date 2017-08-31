@@ -23,6 +23,7 @@ class Commodity extends CI_Controller
             $raw_data = $this->input->raw_input_stream;
             $data_arr = json_decode($raw_data, true);
             $this->valid_params($data_arr);
+            $data_arr['seller'] = $_SESSION['user']['user_id'];
 
             $ret = $this->dao->insert_admin_todo(array(
                 'type' => '商品',

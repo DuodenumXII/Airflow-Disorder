@@ -26,7 +26,7 @@ class Comment extends CI_Controller
             $this->valid_params($data_arr);
             $data_arr['user_id'] = $_SESSION['user']['user_id'];
 
-            $ret = $this->dao->insert_order($data_arr)->row_array();
+            $ret = $this->dao->insert_comment($data_arr);
             $this->msg['data']['result'] = $ret;
 
             $this->output->set_output(json_encode($this->msg));
@@ -44,10 +44,10 @@ class Comment extends CI_Controller
                 if (strlen($str) > 0)
                 {
                     $ret = $this->dao->query_commodity(array('commodity_id' => $arr['commodity_id']))->row_array();
-//                    if ($ret['seller'] == $_SESSION['user']['user_id'])
-//                    {
-//                        return true;
-//                    }
+                    if ($ret['seller'] == $_SESSION['user']['user_id'])
+                    {
+                        return true;
+                    }
                     return false;
                 }
                 return true;
