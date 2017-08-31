@@ -267,7 +267,7 @@ WHERE u.user_id = {$user_id}");
     {
         $this->valid_dao();
         $sql = "SELECT cmt.id, cmt.user_id, usr.user_name, usr.user_icon, cmt.parent
-	, cmt.content
+	, cmt.content, cmt.create_time
 FROM tb_commodity cmd
 	LEFT JOIN tb_comment cmt ON cmt.commodity_id = cmd.commodity_id
 	LEFT JOIN tb_user usr ON usr.user_id = cmt.user_id

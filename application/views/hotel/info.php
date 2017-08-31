@@ -1,9 +1,10 @@
 <script>
     $(document).ready(function () {
+        var id = location.href.split('?')[1].split('=')[1];
         $.post(
             '/airflow.php/user/query/commodity',
             JSON.stringify({
-                'commodity_id': location.href.split('?')[1].split('=')[1]
+                'commodity_id': id
             }),
             function (response) {
                 console.log(response);
@@ -17,6 +18,51 @@
                 });
             }
         );
+        $.post(
+            '/airflow.php/user/query/comment',
+            JSON.stringify({
+                'commodity_id': id
+            }),
+            function (response) {
+                console.log(response);
+                $.each(response.data.result, function (index, item) {
+                    var commentHtml = `<div class="comment" data-id="${item.id}">
+            <a class="avatar">
+                <img src="http://7xoydz.com1.z0.glb.clouddn.com/%E5%A4%B4%E5%83%8F%201.png">
+            </a>
+            <div class="content">
+                <a class="author">${item.user_name}</a>
+                <div class="metadata">
+                    <span class="date">${item.create_time}</span>
+                </div>
+                <div class="text">
+                    <p>${item.content}</p>
+                </div>
+                <div class="actions">
+                    <a class="reply" data-id="${item.id}" onclick="replyComment(this)">回复</a>
+                </div>
+            </div>
+            <div class="seller comment"></div>
+            <div class="ui reply form" data-id="1" style="display: none">
+                <div class="field">
+                    <textarea data-id="${item.id}"></textarea>
+                </div>
+                <div class="ui primary submit labeled icon button" data-id="${item.id}">
+                    <i class="icon edit"></i> 回复
+                </div>
+            </div>
+        </div>`;
+                    
+                    var user;
+                    if (user = sessionStorage.getItem('user')) {
+                        user = JSON.parse(user);
+                        if (item.id == user.user.user_id) {
+
+                        }
+                    }
+                });
+            }
+        )
     });
 
     function buyCommodity() {
@@ -147,25 +193,8 @@
     </div>
 
     <div class="ui sixteen wide column minimal comments" id="comments">
-        <h3 class="ui dividing header">Comments</h3>
-        <div class="comment">
-            <a class="avatar">
-                <img src="http://7xoydz.com1.z0.glb.clouddn.com/%E5%A4%B4%E5%83%8F%201.png">
-            </a>
-            <div class="content">
-                <a class="author">Matt</a>
-                <div class="metadata">
-                    <span class="date">Today at 5:42PM</span>
-                </div>
-                <div class="text">
-                    How artistic!
-                </div>
-                <div class="actions">
-                    <a class="reply">Reply</a>
-                </div>
-            </div>
-        </div>
-        <div class="comment">
+        <h3 class="ui dividing header">评论</h3>
+        <div class="comment" data-id="1">
             <a class="avatar">
                 <img src="http://7xoydz.com1.z0.glb.clouddn.com/%E5%A4%B4%E5%83%8F%201.png">
             </a>
@@ -181,49 +210,38 @@
                     <a class="reply">Reply</a>
                 </div>
             </div>
-            <div class="comments">
-                <div class="comment">
-                    <a class="avatar">
-                        <img src="http://7xoydz.com1.z0.glb.clouddn.com/%E5%A4%B4%E5%83%8F%201.png">
-                    </a>
-                    <div class="content">
-                        <a class="author">Jenny Hess</a>
-                        <div class="metadata">
-                            <span class="date">Just now</span>
-                        </div>
-                        <div class="text">
-                            Elliot you are always so right :)
-                        </div>
-                        <div class="actions">
-                            <a class="reply">Reply</a>
-                        </div>
+            <div class="comment">
+                <a class="avatar">
+                    <img src="http://7xoydz.com1.z0.glb.clouddn.com/%E5%A4%B4%E5%83%8F%201.png">
+                </a>
+                <div class="content">
+                    <a class="author">Jenny Hess</a>
+                    <div class="metadata">
+                        <span class="date">Just now</span>
+                    </div>
+                    <div class="text">
+                        你好厉害
+                    </div>
+                    <div class="actions">
+                        <a class="reply">回复</a>
                     </div>
                 </div>
             </div>
-        </div>
-        <div class="comment">
-            <a class="avatar">
-                <img src="http://7xoydz.com1.z0.glb.clouddn.com/%E5%A4%B4%E5%83%8F%201.png">
-            </a>
-            <div class="content">
-                <a class="author">Joe Henderson</a>
-                <div class="metadata">
-                    <span class="date">5 days ago</span>
+            <div class="ui reply form" data-id="1" style="display: none">
+                <div class="field">
+                    <textarea></textarea>
                 </div>
-                <div class="text">
-                    Dude, this is awesome. Thanks so much
-                </div>
-                <div class="actions">
-                    <a class="reply">Reply</a>
+                <div class="ui primary submit labeled icon button">
+                    <i class="icon edit"></i> 回复
                 </div>
             </div>
         </div>
-        <form class="ui reply form">
+        <form class="ui reply form" id="comment-form">
             <div class="field">
                 <textarea></textarea>
             </div>
             <div class="ui blue labeled submit icon button">
-                <i class="icon edit"></i> Add Reply
+                <i class="icon edit"></i> 添加评论
             </div>
         </form>
     </div>
